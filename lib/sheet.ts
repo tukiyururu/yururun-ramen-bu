@@ -1,15 +1,27 @@
 class SheetApp {
     private sheetName: string = "twitter";
     private sheet = this.getSheet();
+    private rtField: string = "A2";
+    private cntField: string = "B2";
 
-    public getValue(field: string): string {
-        const range = this.sheet.getRange(field);
+    public getRetweet(): string {
+        const range = this.sheet.getRange(this.rtField);
         return <string> range.getValue();
     }
 
-    public setValue(field: string, value: string): void {
-        const range = this.sheet.getRange(field);
+    public setRetweet(value: string): void {
+        const range = this.sheet.getRange(this.rtField);
         range.setValue(value);
+    }
+
+    public getCount(): number {
+        const range = this.sheet.getRange(this.cntField);
+        return +range.getValue();
+    }
+
+    public setCount(value: number): void {
+        const range = this.sheet.getRange(this.cntField);
+        range.setValue(`${value}`);
     }
 
     private getSheet(): GoogleAppsScript.Spreadsheet.Sheet {

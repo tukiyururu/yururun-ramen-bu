@@ -2,14 +2,12 @@ export class Twitter {
     private serviceName: string = "twitter";
     private apiUrl: string = "https://api.twitter.com/1.1/";
 
-    private consumerKey: string;
-    private consumerSecret: string;
-    private callbackFunction: string;
+    private consumerKey: string = process.env.CONSUMER_KEY;
+    private consumerSecret: string = process.env.CONSUMER_SECRET;
+    private callbackFunc: string;
 
-    constructor(config: TwitterConfig) {
-        this.consumerKey = config.consumerKey;
-        this.consumerSecret = config.consumerSecret;
-        this.callbackFunction = config.callbackFunction;
+    constructor(callbackFunc: string) {
+        this.callbackFunc = callbackFunc;
     }
 
     public callback(request: object): GoogleAppsScript.HTML.HtmlOutput {
@@ -37,7 +35,7 @@ export class Twitter {
             .reset();
     }
 
-    public homeTimeline(params: TwitterParams): TwitterJSON.Status[] | false  {
+    public homeTimeline(params: TwitterParams): false | TwitterJSON.Status[]  {
         const json = this.api<TwitterJSON.Status[]>("statuses/home_timeline", params);
         return json;
     }
@@ -61,7 +59,7 @@ export class Twitter {
             .setAuthorizationUrl("https://api.twitter.com/oauth/authorize")
             .setConsumerKey(this.consumerKey)
             .setConsumerSecret(this.consumerSecret)
-            .setCallbackFunction(this.callbackFunction)
+            .setCallbackFunction(this.callbackFunc)
             .setPropertyStore(PropertiesService.getUserProperties());
     }
 
@@ -71,7 +69,7 @@ export class Twitter {
         }).join("&");
     }
 
-    private api<T>(path: string, params?: TwitterParams): T | false {
+    private api<T>(path: string, params?: TwitterParams): false | T {
         const serv = this.service();
         if (serv.hasAccess()) {
             let url: string = `${this.apiUrl}${path}.json`;
@@ -84,7 +82,7 @@ export class Twitter {
             if (params) {
                 if (method === "get") {
                     url += "?" + this.parse(params);
-                } else if (method === "post" && params) {
+                } else if (method === "post") {
                     opts.payload = this.parse(params);
                 }
             }
@@ -104,7 +102,7 @@ export class Twitter {
     }
 
     private empty(obj: any): boolean {
-        if (obj instanceof Array && obj.length !== 0) {
+        if (obj.length > 0) {
             return false;
         }
         for (const key in obj) {

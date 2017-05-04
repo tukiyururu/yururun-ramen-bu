@@ -23,12 +23,6 @@ declare namespace TwitterJSON {
     }
 }
 
-interface TwitterConfig {
-    consumerKey: string;
-    consumerSecret: string;
-    callbackFunction: string;
-}
-
 interface TwitterParams {
     [key: string]: string;
 }
