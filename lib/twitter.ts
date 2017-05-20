@@ -40,16 +40,34 @@ export class Twitter {
         return json;
     }
 
-    public update(params: TwitterParams): void {
-        this.api<TwitterJSON.Status>("statuses/update", params);
+    public followerIds(params: TwitterParams): false | TwitterJSON.Ids {
+        const json = this.api<TwitterJSON.Ids>("followers/ids", params);
+        return json;
     }
 
-    public retweet(id: string): void {
-        this.api<TwitterJSON.Status[]>(`statuses/retweet/${id}`);
+    public lookup(params: TwitterParams): false | TwitterJSON.Lookup[] {
+        const json = this.api<TwitterJSON.Lookup[]>("friendships/lookup", params);
+        return json;
     }
 
-    public favorite(params: TwitterParams): void {
-        this.api<TwitterJSON.Status>("favorites/create", params);
+    public update(params: TwitterParams): false | TwitterJSON.Status {
+        const json = this.api<TwitterJSON.Status>("statuses/update", params);
+        return json;
+    }
+
+    public retweet(id: string): false | TwitterJSON.Status[] {
+        const json = this.api<TwitterJSON.Status[]>(`statuses/retweet/${id}`);
+        return json;
+    }
+
+    public favorite(params: TwitterParams): false | TwitterJSON.Status {
+        const json = this.api<TwitterJSON.Status>("favorites/create", params);
+        return json;
+    }
+
+    public follow(params: TwitterParams): false | TwitterJSON.Follow {
+        const json = this.api<TwitterJSON.Follow>("friendships/create", params);
+        return json;
     }
 
     private service(): GoogleAppsScript.OAuth1.Service {
@@ -73,7 +91,11 @@ export class Twitter {
         const serv = this.service();
         if (serv.hasAccess()) {
             let url: string = `${this.apiUrl}${path}.json`;
-            const method = (path === "statuses/home_timeline") ? "get" : "post";
+            const method = (
+                path === "statuses/home_timeline"
+             || path === "followers/ids"
+             || path === "friendships/lookup"
+            ) ? "get" : "post";
             const opts: FetchOptions = {
                 method: method,
                 muteHttpExceptions: true

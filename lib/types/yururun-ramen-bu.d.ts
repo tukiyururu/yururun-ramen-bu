@@ -21,14 +21,32 @@ declare namespace TwitterJSON {
         id_str: string;
         screen_name: string;
     }
+
+    export interface Ids {
+        ids: string[];
+    }
+
+    export interface Lookup {
+        id_str: string;
+        screen_name: string;
+        connections: string[];
+    }
+
+    export interface Follow {
+        screen_name: string;
+    }
 }
 
 interface TwitterParams {
-    [key: string]: string;
+    [key: string]: any;
 }
 
 interface FetchOptions {
     method: "get" | "post";
     muteHttpExceptions: true;
     payload?: string
+}
+
+interface Array<T> {
+    includes<T>(obj: any): boolean;
 }

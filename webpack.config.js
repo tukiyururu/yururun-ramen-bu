@@ -4,14 +4,12 @@ var GasPlugin = require("gas-webpack-plugin");
 var Dotenv = require("dotenv-webpack");
 
 var opts = {
-    replacements: [
-        {
-            pattern: /\.default/g,
-            replacement: function() {
-                return "[\"default\"]";
-            }
+    replacements: [{
+        pattern: /\.default/g,
+        replacement: function() {
+            return "[\"default\"]";
         }
-    ]
+    }]
 }
 
 module.exports = {
@@ -28,7 +26,7 @@ module.exports = {
         rules: [
             {
                 test: /\.js$/,
-                include: /node_modules(\/|\\)bignumber.js/,
+                include: /node_modules(\/|\\)bignumber\.js/,
                 use: [{ loader: StringReplacePlugin.replace(opts) }]
             },
             {
