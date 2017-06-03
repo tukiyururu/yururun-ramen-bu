@@ -4,6 +4,7 @@ declare module "bignumber.js" {
     class BigNumber {
         constructor(value: string);
         minus(n: number): BigNumber;
+        minus(n:string):BigNumber;
         toFixed(dp?: number): string;
     }
 

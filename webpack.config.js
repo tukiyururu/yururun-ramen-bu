@@ -1,7 +1,17 @@
 "use strict";
+var webpack = require("webpack");
 var StringReplacePlugin = require("string-replace-webpack-plugin");
 var GasPlugin = require("gas-webpack-plugin");
 var Dotenv = require("dotenv-webpack");
+
+var file = ".env.test";
+
+if (process.env.NODE_ENV === "development") {
+    file = ".env.dev";
+} else if (process.env.NODE_ENV === "production") {
+    file = ".env";
+}
+
 
 var opts = {
     replacements: [{
@@ -26,7 +36,7 @@ module.exports = {
         rules: [
             {
                 test: /\.js$/,
-                include: /node_modules(\/|\\)bignumber\.js/,
+                include: /node_modules\/bignumber\.js/,
                 use: [{ loader: StringReplacePlugin.replace(opts) }]
             },
             {
@@ -38,6 +48,9 @@ module.exports = {
     },
     plugins: [
         new GasPlugin(),
-        new Dotenv({ path: ".env.test" })
+        new Dotenv({ path: ".env/" + file }),
+        new webpack.DefinePlugin({
+            "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV)
+        })
     ]
 };

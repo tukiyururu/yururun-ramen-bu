@@ -49,9 +49,11 @@ global.twitterDailyUpdate = () => {
         tweet += `ラーメン部活動は永遠なり。この調子で #${process.env.HASH_TAG} を語り継いでいきましょう！`;
     }
 
-    const status = twtr.update({ status: tweet });
-    if (status) {
-        Logger.log(`[TWEET] https://twitter.com/${status.user.screen_name}/status/${status.id_str}`);
+    if (process.env.NODE_ENV !== "development") {
+        const status = twtr.update({ status: tweet });
+        if (status) {
+            Logger.log(`[TWEET] https://twitter.com/${status.user.screen_name}/status/${status.id_str}`);
+        }
     }
 
     const ids = twtr.followerIds({
@@ -70,9 +72,11 @@ global.twitterDailyUpdate = () => {
                  && !connect.includes("following_requested")
                 ) {
 
-                    twtr.follow({ user_id: lkup.id_str });
+                    if (process.env.NODE_ENV !== "development") {
+                        twtr.follow({ user_id: lkup.id_str });
+                        Utilities.sleep(3000);
+                    }
                     Logger.log(`[FOLLOW] https://twitter.com/${lkup.screen_name}`);
-                    Utilities.sleep(3000);
                 }
             }
         }
@@ -87,6 +91,9 @@ global.twitterHashtagRetweet = () => {
     }
     const lstId = Sheet.getRetweet();
     Sheet.setRetweet(statuses[0].id_str);
+    if (process.env.NODE_ENV === "development") {
+        Logger.log(`[LST]: https://twitter.com/a/status/${lstId}`);
+    }
 
     let tmpId: string = lstId;
     const reg = new RegExp(`#${process.env.HASH_TAG}`);
@@ -95,7 +102,14 @@ global.twitterHashtagRetweet = () => {
     flag: while (statuses) {
         for (const status of statuses) {
             tmpId = status.id_str;
-            if (lstId === tmpId) {
+            if (process.env.NODE_ENV === "development") {
+                Logger.log(`[TMP]: https://twitter.com/${status.user.screen_name}/status/${tmpId}`);
+            }
+
+            const chBig = new BigNumber(tmpId);
+            const check = +chBig.minus(lstId).toFixed(0);
+
+            if (check <= 0) {
                 break flag;
             }
 
@@ -112,8 +126,8 @@ global.twitterHashtagRetweet = () => {
             }
         }
 
-        const big = new BigNumber(tmpId);
-        params.max_id = big.minus(1).toFixed(0);
+        const tmpBig = new BigNumber(tmpId);
+        params.max_id = tmpBig.minus(1).toFixed(0);
         statuses = twtr.homeTimeline(params);
     }
 
@@ -123,10 +137,13 @@ global.twitterHashtagRetweet = () => {
 
     for (let i = num - 1; i >= 0; i--) {
         const rst = result[i];
-        twtr.retweet(rst.id);
-        twtr.favorite({ id: rst.id });
+
+        if (process.env.NODE_ENV !== "development") {
+            twtr.retweet(rst.id);
+            twtr.favorite({ id: rst.id });
+            Utilities.sleep(3000);
+        }
         Logger.log(`[RT&Fav] https://twitter.com/${rst.name}/status/${rst.id}`);
-        Utilities.sleep(3000);
     }
 };
 
