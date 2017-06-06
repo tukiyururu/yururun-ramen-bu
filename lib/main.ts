@@ -96,7 +96,8 @@ global.twitterHashtagRetweet = () => {
     }
 
     let tmpId: string = lstId;
-    const reg = new RegExp(`#${process.env.HASH_TAG}`);
+    let big = new BigNumber(tmpId);
+    const reg = new RegExp(`^(.*?[\\s　]+?|)#${process.env.HASH_TAG}([\\s　]+?.*|)$`);
     const result: TwitterParams[] = [];
 
     flag: while (statuses) {
@@ -106,10 +107,8 @@ global.twitterHashtagRetweet = () => {
                 Logger.log(`[TMP]: https://twitter.com/${status.user.screen_name}/status/${tmpId}`);
             }
 
-            const chBig = new BigNumber(tmpId);
-            const check = +chBig.minus(lstId).toFixed(0);
-
-            if (check <= 0) {
+            big = new BigNumber(tmpId);
+            if (big.lessThanOrEqualTo(lstId)) {
                 break flag;
             }
 
@@ -126,8 +125,7 @@ global.twitterHashtagRetweet = () => {
             }
         }
 
-        const tmpBig = new BigNumber(tmpId);
-        params.max_id = tmpBig.minus(1).toFixed(0);
+        params.max_id = big.minus(1).toFixed(0);
         statuses = twtr.homeTimeline(params);
     }
 

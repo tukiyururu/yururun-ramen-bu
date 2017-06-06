@@ -1,6 +1,6 @@
 {
   "name": "yururun-ramen-bu",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "yururun ramen bu",
   "main": "dist/main.gs",
   "scripts": {
