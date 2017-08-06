@@ -2,8 +2,8 @@ export class Twitter {
     private serviceName: string = "twitter";
     private apiUrl: string = "https://api.twitter.com/1.1/";
 
-    private consumerKey: string = process.env.CONSUMER_KEY;
-    private consumerSecret: string = process.env.CONSUMER_SECRET;
+    private consumerKey: string = `${process.env.CONSUMER_KEY}`;
+    private consumerSecret: string = `${process.env.CONSUMER_SECRET}`;
     private callbackFunc: string;
 
     constructor(callbackFunc: string) {

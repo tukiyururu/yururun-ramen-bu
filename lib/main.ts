@@ -45,8 +45,12 @@ global.twitterDailyUpdate = () => {
         tweet += "みなさん、この調子でラーメン部活動をがんばっていきましょう！！";
     } else if (count < 10) {
         tweet += "今日は活発でしたね！　みなさん、明日からも元気よくラーメン部活動をがんばっていきましょう！！！";
-    } else {
+    } else if (count < 20) {
         tweet += `ラーメン部活動は永遠なり。この調子で #${process.env.HASH_TAG} を語り継いでいきましょう！`;
+    } else if (count < 30) {
+        tweet += `今ここに、千年 #${process.env.HASH_TAG} 王国への扉が開かれた！！！！　みんなで伝説の王国へ行こう！`;
+    } else {
+        tweet += `ーーそして、#${process.env.HASH_TAG} は神話となった。［ゆるる幼稚園黙示録 第6章13節］`;
     }
 
     if (process.env.NODE_ENV !== "development") {
