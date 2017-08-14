@@ -15,11 +15,20 @@ declare namespace TwitterJSON {
         text: string;
         user: User;
         retweeted_status: User | undefined;
+        entities: Entities
     }
 
     export interface User {
         id_str: string;
         screen_name: string;
+    }
+
+    export interface Entities {
+        hashtags: Hashtags[]
+    }
+
+    export interface Hashtags {
+        text: string
     }
 
     export interface Ids {
@@ -33,7 +42,6 @@ declare namespace TwitterJSON {
     }
 
     export interface Follow {
-        screen_name: string;
     }
 }
 

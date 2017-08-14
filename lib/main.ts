@@ -101,7 +101,6 @@ global.twitterHashtagRetweet = () => {
 
     let tmpId: string = lstId;
     let big = new BigNumber(tmpId);
-    const reg = new RegExp(`^(.*?[\\s　]+?|)#${process.env.HASH_TAG}([\\s　]+?.*|)$`);
     const result: TwitterParams[] = [];
 
     flag: while (statuses) {
@@ -119,13 +118,18 @@ global.twitterHashtagRetweet = () => {
             if (
                 !status.retweeted_status
              && status.user.id_str !== process.env.USER_ID
-             && status.text.match(reg)
             ) {
 
-                result.push({
-                    id: tmpId,
-                    name: status.user.screen_name
-                });
+                for (const hashtag of status.entities.hashtags) {
+                    if (hashtag.text === process.env.HASH_TAG) {
+                        result.push({
+                            id: tmpId,
+                            name: status.user.screen_name
+                        });
+
+                        break;
+                    }
+                }
             }
         }
 
