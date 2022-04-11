@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
-    "lib": ["esnext"],
-    "outDir": "dist",
+    "lib": [
+      "esnext"
+    ],
+    "outDir": "./dist",
     "experimentalDecorators": true,
     "strict": true
   },

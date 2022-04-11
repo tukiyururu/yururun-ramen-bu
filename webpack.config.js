@@ -1,20 +1,29 @@
-const GasPlugin = require('gas-webpack-plugin');
+const ClaspPlugin = require("./clasp-plugin");
+const GasPlugin = require("gas-webpack-plugin");
 
+// .envのパスを設定
+const envPath = `./.env/.env.${process.env.NODE_ENV}`;
+
+// webpackの設定
 module.exports = {
-  mode: 'development',
-  entry: './src/main.ts',
+  mode: `${process.env.NODE_ENV}`,
+  entry: "./src/main.ts",
   module: {
     rules: [
       {
         test: /\.ts$/,
-        use: 'ts-loader'
+        use: "ts-loader"
       },
 	  ],
 	},
   resolve: {
-    extensions: ['.ts', '.js']
+    extensions: [".ts", ".js"]
   },
   plugins: [
+    new ClaspPlugin({
+      envPath: envPath,
+      rootDir: "./dist"
+    }),
     new GasPlugin()
   ]
 };

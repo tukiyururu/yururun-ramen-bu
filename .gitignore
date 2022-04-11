@@ -1,5 +1,6 @@
 .clasp.json
-.env/
+.env/*
+!.env/.env.example
 dist/*
 !dist/appsscript.json
 node_modules/

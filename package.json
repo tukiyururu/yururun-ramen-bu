@@ -4,9 +4,11 @@
   "description": "yururun ramen bu 2",
   "main": "dist/main.js",
   "scripts": {
-    "build": "webpack",
-    "push": "clasp push",
-    "clean": "rm dist/main.js"
+    "build:dev": "cross-env NODE_ENV=development webpack",
+    "build:prod": "cross-env NODE_ENV=production webpack",
+    "push:dev": "npm run build:dev && clasp push",
+    "push:prod": "npm run build:prod && clasp push",
+    "clean": "rm dist/main.js .clasp.json"
   },
   "repository": {
     "type": "git",
@@ -20,6 +22,8 @@
   "homepage": "https://github.com/tukiyururu/yururun-ramen-bu#readme",
   "devDependencies": {
     "@types/google-apps-script": "^1.0.45",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.0",
     "gas-webpack-plugin": "^2.2.1",
     "ts-loader": "^9.2.8",
     "typescript": "^4.6.3",
