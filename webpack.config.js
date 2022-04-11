@@ -1,4 +1,5 @@
 const ClaspPlugin = require("./clasp-plugin");
+const ESLintPlugin = require("eslint-webpack-plugin");
 const GasPlugin = require("gas-webpack-plugin");
 
 // .envのパスを設定
@@ -13,9 +14,9 @@ module.exports = {
       {
         test: /\.ts$/,
         use: "ts-loader"
-      },
-	  ],
-	},
+      }
+    ]
+  },
   resolve: {
     extensions: [".ts", ".js"]
   },
@@ -23,6 +24,10 @@ module.exports = {
     new ClaspPlugin({
       envPath: envPath,
       rootDir: "./dist"
+    }),
+    new ESLintPlugin({
+      extensions: [".ts", ".js"],
+      exclude: "node_modules"
     }),
     new GasPlugin()
   ]

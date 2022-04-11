@@ -2,12 +2,12 @@ const fs = require("fs");
 
 class ClaspPlugin {
   // コンストラクタ
-  constructor (config = {}) {
+  constructor(config = {}) {
     // オプションのパラメータを設定
     this.config = Object.assign({}, {
       envPath: "./.env",
       rootDir: "./"
-    }, config)
+    }, config);
   }
 
   apply(compiler) {
@@ -27,14 +27,11 @@ class ClaspPlugin {
       }, null, 2);
 
       // .clasp.jsonを生成
-      const file = "./.clasp.json"
-
-      fs.writeFile(file, data, (err) => {
-        console.log(`create ${file}`);
+      fs.writeFile("./.clasp.json", data, (err) => {
         if (err) throw err;
       });
     });
   }
 }
 
-module.exports = ClaspPlugin
+module.exports = ClaspPlugin;
