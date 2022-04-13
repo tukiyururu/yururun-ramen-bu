@@ -11,7 +11,7 @@ class ClaspPlugin {
   }
 
   apply(compiler) {
-    compiler.hooks.run.tap("ClaspPlugin", (compilation) => {
+    compiler.hooks.run.tap("ClaspPlugin", () => {
       // .envファイルを読込
       require("dotenv").config({
         path: this.config.envPath
