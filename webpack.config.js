@@ -1,4 +1,5 @@
 const ClaspPlugin = require("./clasp-plugin");
+const Dotenv = require("dotenv-webpack");
 const ESLintPlugin = require("eslint-webpack-plugin");
 const GasPlugin = require("gas-webpack-plugin");
 
@@ -24,6 +25,9 @@ module.exports = {
     new ClaspPlugin({
       envPath: envPath,
       rootDir: "./dist"
+    }),
+    new Dotenv({
+      path: envPath
     }),
     new ESLintPlugin({
       extensions: [".ts", ".js"],

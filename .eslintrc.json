@@ -22,6 +22,11 @@
       "error",
       "never"
     ],
+    "max-len": [
+      "error", {
+        "code": 100
+      }
+    ],
     "no-unused-vars": "off",
     "quotes": [
       "error",
