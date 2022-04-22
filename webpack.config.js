@@ -5,11 +5,13 @@ const GasPlugin = require("gas-webpack-plugin");
 
 // .envのパスを設定
 const envPath = `./.env/.env.${process.env.NODE_ENV}`;
+// エントリーのパスを設定
+const entryPath = `${process.env.SET_PROP}` === "true" ? "./src/set-property.ts" : "./src/main.ts";
 
 // webpackの設定
 module.exports = {
   mode: `${process.env.NODE_ENV}`,
-  entry: "./src/main.ts",
+  entry: entryPath,
   module: {
     rules: [
       {

@@ -6,6 +6,8 @@
   "scripts": {
     "build:dev": "cross-env NODE_ENV=development webpack",
     "build:prod": "cross-env NODE_ENV=production webpack",
+    "pushProp:dev": "cross-env NODE_ENV=development SET_PROP=true webpack && clasp push",
+    "pushProp:prod": "cross-env NODE_ENV=production SET_PROP=true webpack && clasp push",
     "push:dev": "npm run build:dev && clasp push",
     "push:prod": "npm run build:prod && clasp push",
     "clean": "rm dist/main.js .clasp.json"

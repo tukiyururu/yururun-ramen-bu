@@ -1,5 +1,5 @@
 export {};
 
 declare global {
-  function greeter(): void;
+  function setProperty(): void;
 }
