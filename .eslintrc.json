@@ -37,6 +37,7 @@
       "error", {
         "require": {}
       }
-    ]
+    ],
+    "space-infix-ops": "error"
   }
 }
