@@ -33,11 +33,6 @@
       "error",
       "double"
     ],
-    "require-jsdoc": [
-      "error", {
-        "require": {}
-      }
-    ],
     "space-infix-ops": "error"
   }
 }

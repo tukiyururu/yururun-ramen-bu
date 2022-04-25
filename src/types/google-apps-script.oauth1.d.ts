@@ -14,7 +14,10 @@ declare namespace GoogleAppsScript {
       setPropertyStore(propertyStore: Properties.Properties): Service;
       handleCallback(callbackRequest: object): boolean;
       authorize(): string;
+      hasAccess(): boolean;
       reset(): void;
+      // eslint-disable-next-line camelcase
+      fetch(url: string, params: URL_Fetch.URLFetchRequestOptions): URL_Fetch.HTTPResponse;
     }
   }
 }

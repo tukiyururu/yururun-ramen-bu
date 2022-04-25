@@ -1,5 +1,8 @@
-import {RamenBuConst} from "./ramen-bu-const";
+import {TwitterConst} from "./const/twitter-const";
 
+/**
+ * ユーザプロパティ設定
+ */
 global.setProperty = ():void => {
   // ユーザプロパティを取得
   const userProperties = PropertiesService.getUserProperties();
@@ -7,11 +10,11 @@ global.setProperty = ():void => {
   userProperties.deleteAllProperties();
 
   // コンシューマキー
-  userProperties.setProperty(RamenBuConst.CONSUMER_KEY, `${process.env.CONSUMER_KEY}`);
+  userProperties.setProperty(TwitterConst.CONSUMER_KEY, `${process.env.CONSUMER_KEY}`);
   // コンシューマーキーの鍵
-  userProperties.setProperty(RamenBuConst.CONSUMER_SECRET, `${process.env.CONSUMER_SECRET}`);
+  userProperties.setProperty(TwitterConst.CONSUMER_SECRET, `${process.env.CONSUMER_SECRET}`);
   // ユーザID
-  userProperties.setProperty(RamenBuConst.USER_ID, `${process.env.USER_ID}`);
+  userProperties.setProperty(TwitterConst.USER_ID, `${process.env.USER_ID}`);
   // ハッシュタグ
-  userProperties.setProperty(RamenBuConst.HASH_TAG, `${process.env.HASH_TAG}`);
+  userProperties.setProperty(TwitterConst.HASH_TAG, `${process.env.HASH_TAG}`);
 };
