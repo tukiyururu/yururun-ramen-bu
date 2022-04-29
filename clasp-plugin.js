@@ -1,7 +1,14 @@
 const fs = require("fs");
 
+/**
+ * webpack用claspプラグイン
+ * @class {ClaspPlugin}
+ */
 class ClaspPlugin {
-  // コンストラクタ
+  /**
+   * @constructor
+   * @param {object} config
+   */
   constructor(config = {}) {
     // オプションのパラメータを設定
     this.config = Object.assign({}, {
@@ -10,6 +17,10 @@ class ClaspPlugin {
     }, config);
   }
 
+  /**
+   * webpack実行時の処理
+   * @param {any} compiler
+   */
   apply(compiler) {
     compiler.hooks.run.tap("ClaspPlugin", () => {
       // .envファイルを読込

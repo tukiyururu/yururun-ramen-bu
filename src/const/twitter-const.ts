@@ -58,10 +58,22 @@ export class TwitterConst {
   static readonly API_URL: string = "https://api.twitter.com/1.1/";
 
   /**
+   * APIパス タイムライン
+   * @constant {string}
+   */
+  static readonly API_PATH_HOME_TIMELINE: string = "statuses/home_timeline";
+
+  /**
    * APIパス ツイート
    * @constant {string}
    */
   static readonly API_PATH_UPDATE: string = "statuses/update";
+
+  /**
+   * タイムライン取得数
+   * @constant {number}
+   */
+  static readonly HOME_TIMELINE_COUNT: number = 200;
 
   /**
    * 認証メッセージ 成功

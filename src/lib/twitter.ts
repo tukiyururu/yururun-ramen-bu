@@ -21,12 +21,14 @@ export class Twitter {
   /**
    * @constructor
    * @param {string} callbackFunctionName コールバック関数名
+   * @param {GoogleAppsScript.Properties.Properties} userProperties ユーザプロパティ
    */
-  public constructor(callbackFunctionName: string) {
+  public constructor(callbackFunctionName: string,
+      userProperties: GoogleAppsScript.Properties.Properties) {
     // コールバック関数名を設定
     this.callbackFunctionName = callbackFunctionName;
     // ユーザプロパティを取得
-    this.userProperties = PropertiesService.getUserProperties();
+    this.userProperties = userProperties;
   }
 
   /**
@@ -68,18 +70,32 @@ export class Twitter {
   }
 
   /**
+   * タイムライン
+   * @return {Twitter.JSON.Status[]}  タイムライン取得結果
+   */
+  public homeTimeline(): Twitter.JSON.Status[] {
+    // パラメータを設定
+    const params: Twitter.Parameters = {
+      count: TwitterConst.HOME_TIMELINE_COUNT
+    };
+
+    // API基底を呼出し
+    return this.api<Twitter.JSON.Status[]>(TwitterConst.API_PATH_HOME_TIMELINE, params);
+  }
+
+  /**
    * ツイート
    * @param {string} status ツイート文字列
-   * @return {TwitterJSON.JSON.Status} ツイート結果
+   * @return {Twitter.JSON.Status} ツイート結果
    */
   public update(status: string): Twitter.JSON.Status {
-    // post時のパラメータを設定
-    const payload: GoogleAppsScript.URL_Fetch.Payload = {
+    // パラメータを設定
+    const params: Twitter.Parameters = {
       status: status
     };
 
     // API基底を呼出し
-    return this.api<Twitter.JSON.Status>(TwitterConst.API_PATH_UPDATE, payload);
+    return this.api<Twitter.JSON.Status>(TwitterConst.API_PATH_UPDATE, params);
   }
 
   /**
@@ -106,12 +122,23 @@ export class Twitter {
   }
 
   /**
+   * パラメータ展開
+   * @param {Twitter.Parameters} params パラメータ
+   * @return {string} パラメータ文字列
+   */
+  private parse(params: Twitter.Parameters): string {
+    return Object.keys(params).map((key: string) => {
+      return key + "=" + params[key];
+    }).join("&");
+  }
+
+  /**
    * API基底
    * @param {string} apiPath APIパス
-   * @param {GoogleAppsScript.URL_Fetch.Payload} payload post時のパラメータ
+   * @param {Twitter.Parameters} params パラメータ
    * @return {T} 処理結果
    */
-  private api<T>(apiPath: string, payload: GoogleAppsScript.URL_Fetch.Payload): T {
+  private api<T>(apiPath: string, params: Twitter.Parameters): T {
     // サービスを取得
     const service = this.getService();
     // 処理結果
@@ -120,18 +147,28 @@ export class Twitter {
     // サービスにアクセスできた場合
     if (service.hasAccess()) {
       // API URLを設定
-      const apiUrl: string = `${TwitterConst.API_URL}${apiPath}.json`;
+      let apiUrl: string = TwitterConst.API_URL + apiPath + ".json";
+      // URL Fetchオプションを初期化
+      const opts: GoogleAppsScript.URL_Fetch.URLFetchRequestOptions = {};
 
-      // URL Fetchのパラメータを設定
-      const params: GoogleAppsScript.URL_Fetch.URLFetchRequestOptions = {
-        method: "post",
-        payload: payload
-      };
+      if (TwitterConst.API_PATH_UPDATE === apiPath) {
+        // post時のオプションを設定
+        opts.method = "post";
+        opts.payload = params;
+      } else {
+        // get時のオプション、URLを設定
+        opts.method = "get";
+        apiUrl += "?" + this.parse(params);
+      }
 
-      // 処理結果を取得
-      const response = service.fetch(apiUrl, params);
-      // 処理結果をJSONに変換
-      result = JSON.parse(response.getContentText());
+      try {
+        // 処理結果を取得
+        const response = service.fetch(apiUrl, opts);
+        // 処理結果をJSONに変換
+        result = JSON.parse(response.getContentText());
+      } catch (error: any) {
+        Logger.log(error);
+      }
     }
 
     // 処理結果を返却
