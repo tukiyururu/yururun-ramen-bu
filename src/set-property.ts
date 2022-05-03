@@ -3,7 +3,7 @@ import {TwitterConst} from "./const/twitter-const";
 /**
  * ユーザプロパティ設定
  */
-global.setProperty = ():void => {
+global.setProperty = () => {
   // ユーザプロパティを取得
   const userProperties = PropertiesService.getUserProperties();
   // ユーザプロパティをリセット

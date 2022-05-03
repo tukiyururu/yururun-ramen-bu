@@ -1,8 +1,16 @@
+import {RamenBuConst} from "../const/ramen-bu-const";
+
 /**
  * ユーティリティ用クラス
  * @class {Util}
  */
 export class Util {
+  /**
+   * @constructor
+   */
+  private constructor() {
+  }
+
   /**
    * 埋込フォーマット
    * @param {string} string 文字列
@@ -11,7 +19,7 @@ export class Util {
    */
   public static format(string: string, ...embedAry: string[]): string {
     return string.replace(/{(\d+)}/g, (match: string, number: number) => {
-      return typeof embedAry[number] != "undefined" ? embedAry[number] : match;
+      return typeof embedAry[number] != RamenBuConst.UNDEFINED_STRING ? embedAry[number] : match;
     });
   }
 

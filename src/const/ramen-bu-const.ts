@@ -10,6 +10,12 @@ export class RamenBuConst {
   static readonly EMPTY_STRING: string = "";
 
   /**
+   * undefined
+   * @constant {string}
+   */
+  static readonly UNDEFINED_STRING: string = "undefined";
+
+  /**
    * 日次メッセージ 回数
    * @constant {string}
    */
@@ -17,9 +23,9 @@ export class RamenBuConst {
 
   /**
    * 日次メッセージ 配列
-   * @constant {RamenBuConst.DailyMessageArray[]}
+   * @constant {RamenBu.DailyMessageArray[]}
    */
-  static readonly DAILY_MESSAGE_ARRAY: RamenBuConst.DailyMessageArray[] = [
+  static readonly DAILY_MESSAGE_ARRAY: RamenBu.DailyMessageArray[] = [
     {
       border: 0,
       message: "０回……。このままでは廃部の危機です。みなさんラーメン部員としての自覚を持ってください！"

@@ -86,4 +86,10 @@ export class TwitterConst {
    * @constant {string}
    */
   static readonly AUTHORIZATION_MESSAGE_NO: string = "認証に失敗しました。";
+
+  /**
+   * リツイート＆お気に入りメッセージ
+   * @constant {string}
+   */
+  static readonly RT_FAV_MESSAGE: string = "[RT&Fav] https://twitter.com/{0}/status/{1}";
 }

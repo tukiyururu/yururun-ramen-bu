@@ -38,8 +38,8 @@ class ClaspPlugin {
       }, null, 2);
 
       // .clasp.jsonを生成
-      fs.writeFile("./.clasp.json", data, (err) => {
-        if (err) throw err;
+      fs.writeFile("./.clasp.json", data, (error) => {
+        if (error) throw error;
       });
     });
   }

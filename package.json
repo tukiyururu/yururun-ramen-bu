@@ -22,6 +22,9 @@
     "url": "https://github.com/tukiyururu/yururun-ramen-bu/issues"
   },
   "homepage": "https://github.com/tukiyururu/yururun-ramen-bu#readme",
+  "dependencies": {
+    "bignumber.js": "^9.0.2"
+  },
   "devDependencies": {
     "@types/google-apps-script": "^1.0.45",
     "@typescript-eslint/eslint-plugin": "^5.18.0",
