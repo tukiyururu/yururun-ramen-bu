@@ -28,6 +28,22 @@ global.getAuthorizeUrl = () => {
 };
 
 /**
+ * スプレッドシート設定
+ */
+global.setSheet = () => {
+  // スプレッドシートに回数を設定
+  Sheet.setCount(0);
+
+  // タイムラインを取得
+  const statuses = twitter.homeTimeline();
+
+  if (statuses !== null) {
+    // タイムラインが取得できた場合，スプレッドシートに最終IDを設定
+    Sheet.setLastId(statuses[0].id_str);
+  }
+};
+
+/**
  * ハッシュタグのリツイート
  */
 global.hashTagRetweet = () => {
