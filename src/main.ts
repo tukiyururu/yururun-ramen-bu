@@ -58,7 +58,7 @@ global.hashTagRetweet = () => {
     const userProperties = PropertiesService.getUserProperties();
 
     // ループ終了フラグを初期化
-    let loopEndFlg = true;
+    let loopEndFlg = false;
     // ユーザIDを取得
     const userId: string = `${userProperties.getProperty(TwitterConst.USER_ID)}`;
     // 判定ハッシュタグを取得
@@ -141,7 +141,7 @@ global.dailyUpdate = () => {
     for (const dailyMessage of RamenBuConst.DAILY_MESSAGE_ARRAY) {
       // 日次メッセージ 配列からメッセージオブジェクトを取得
       if (count <= dailyMessage.border) {
-        // 回数を全核変換
+        // 回数を全角変換
         const zenCount: string = Util.toZenkaku(`${count}`);
         // 現在時刻を取得
         const now: string = new Date().toString();

@@ -79,7 +79,7 @@ export class Sheet {
   /**
    * 回数設定
    * @param {number} number 値
-   * @return {string} 回数
+   * @return {number} 回数
    */
   public static setCount(number: number): number | null {
     // スプレッドシートに回数を設定

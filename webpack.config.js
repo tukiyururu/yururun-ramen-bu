@@ -1,4 +1,4 @@
-const ClaspPlugin = require("./webpack-clasp-plugin");
+const ClaspPlugin = require("./clasp-webpack-plugin");
 const Dotenv = require("dotenv-webpack");
 const ESLintPlugin = require("eslint-webpack-plugin");
 const GasPlugin = require("gas-webpack-plugin");
