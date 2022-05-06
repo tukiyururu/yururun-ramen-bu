@@ -1,4 +1,3 @@
-import {RamenBuConst} from "../const/ramen-bu-const";
 import {SheetConst} from "../const/sheet-const";
 
 /**
@@ -17,7 +16,7 @@ export class Sheet {
    * @param {string} range セル範囲
    * @param {T} [value] 値
    * @param {"get" | "set"} [mode] 操作モード
-   * @return {T | null}
+   * @return {T | null} 処理結果
    */
   public static sheetHandler<T>(range: string, value?: T, mode?: "get" | "set"): T | null {
     // 処理結果
@@ -32,7 +31,7 @@ export class Sheet {
         // スプレッドシートが取得できた場合，セル範囲を取得
         const shtRange = sheet.getRange(range);
 
-        if (SheetConst.MODE_SET === mode && typeof value !== RamenBuConst.UNDEFINED_STRING) {
+        if (SheetConst.MODE_SET === mode && "undefined" !== typeof value) {
           // 操作モードが設定，かつ，値が設定された場合，値を設定して取得
           result = <T> shtRange.setValue(value).getValue();
         } else {
@@ -41,7 +40,10 @@ export class Sheet {
         }
       }
     } catch (error: any) {
+      // エラーログを出力
       Logger.log(error);
+      // 処理を終了
+      return result;
     }
 
     // 処理結果を返却

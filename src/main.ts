@@ -57,22 +57,23 @@ global.hashTagRetweet = () => {
     // ユーザプロパティを取得
     const userProperties = PropertiesService.getUserProperties();
 
-    // ループ終了フラグを初期化
-    let loopEndFlg = false;
     // ユーザIDを取得
     const userId: string = `${userProperties.getProperty(TwitterConst.USER_ID)}`;
     // 判定ハッシュタグを取得
     const matchHashtag: string = `${userProperties.getProperty(TwitterConst.HASH_TAG)}`;
 
+    // ループ終了フラグを初期化
+    let loopEndFlg = false;
     // 一時IDを設定
     let tempId = new BigNumber(lastId);
-    // スプレッドシートに最終IDを設定
-    Sheet.setLastId(statuses[0].id_str);
-    // リツイートオブジェクト配列
+    // リツイートオブジェクト配列を初期化
     const retweets: RamenBu.Retweets[] = [];
 
+    // スプレッドシートに最終IDを設定
+    Sheet.setLastId(statuses[0].id_str);
+
     while (statuses !== null) {
-      // タイムラインが取得できた場合，繰り返し
+      // タイムラインが取得できた場合，ループ
       for (const status of statuses) {
         // 一時IDを設定
         tempId = new BigNumber(status.id_str);
@@ -84,16 +85,15 @@ global.hashTagRetweet = () => {
           break;
         }
 
-        if (!status.retweeted_status && status.user.id_str !== userId) {
+        if (!status.retweeted_status && userId !== status.user.id_str) {
           // リツイートでない，かつ，自分のツイートでない場合
           for (const hashtag of status.entities.hashtags) {
-            if (hashtag.text === matchHashtag) {
+            if (matchHashtag === hashtag.text) {
               // ハッシュタグが一致した場合，リツイートオブジェクトを追加
               retweets.push({
                 id_str: status.id_str,
                 screen_name: status.user.screen_name
               });
-
               // forループを終了
               break;
             }
@@ -102,7 +102,7 @@ global.hashTagRetweet = () => {
       }
 
       if (loopEndFlg) {
-        // ループ終了
+        // ループを終了
         break;
       } else {
         // 最大IDを設定
@@ -112,14 +112,37 @@ global.hashTagRetweet = () => {
       }
     }
 
-    for (let i = retweets.length - 1; i >= 0; i--) {
-      // リツイートオブジェクトを取得
-      const retweet = retweets[i];
-      // メッセージ変換
-      const message = Util.format(TwitterConst.RT_FAV_MESSAGE, retweet.screen_name, retweet.id_str);
+    // スプレッドシートから回数を取得
+    const count = Sheet.getCount();
 
-      // ログ出力
-      Logger.log(message);
+    if (count !== null) {
+      // スプレッドシートが取得できた場合
+      // リツイートオブジェクトの数を取得
+      const rtsCount: number = retweets.length;
+
+      // スプレッドシートの回数を更新
+      Sheet.setCount(rtsCount + count);
+
+      for (let i = rtsCount - 1; i >= 0; i--) {
+        // リツイートオブジェクトを取得
+        const retweet = retweets[i];
+        // リツイート
+        twitter.retweet(retweet.id_str);
+        // お気に入り
+        twitter.favorite(retweet.id_str);
+
+        if (RamenBuConst.DEVELOPMENT_STRING === `${process.env.NODE_ENV}`) {
+          // 開発の場合
+          // メッセージを設定
+          const message = Util.format(TwitterConst.MESSAGE_RETWEET_FAVORITE,
+              retweet.screen_name, retweet.id_str);
+          // ログ出力
+          Logger.log(message);
+        }
+
+        // スリープ
+        Utilities.sleep(RamenBuConst.SLEEP);
+      }
     }
   }
 };
@@ -140,24 +163,26 @@ global.dailyUpdate = () => {
 
     for (const dailyMessage of RamenBuConst.DAILY_MESSAGE_ARRAY) {
       // 日次メッセージ 配列からメッセージオブジェクトを取得
-      if (count <= dailyMessage.border) {
+      if (dailyMessage.border >= count) {
         // 回数を全角変換
         const zenCount: string = Util.toZenkaku(`${count}`);
-        // 現在時刻を取得
-        const now: string = new Date().toString();
-
         // ツイート文字列を設定
         const status = Util.format(RamenBuConst.DAILY_MESSAGE_COUNT, hashTag, zenCount) +
-            Util.format(dailyMessage.message, hashTag) + " " + now;
+            Util.format(dailyMessage.message, hashTag);
+
         // ツイート結果を取得
         const result = twitter.update(status);
 
-        if (result !== null) {
-          // ログ出力
-          Logger.log(result.id_str);
-          Logger.log(result.text);
+        if (RamenBuConst.DEVELOPMENT_STRING === `${process.env.NODE_ENV}`) {
+          // 開発の場合
+          if (result !== null) {
+            // メッセージを設定
+            const message = Util.format(TwitterConst.MESSAGE_UPDATE,
+                result.user.screen_name, result.id_str);
+            // ログ出力
+            Logger.log(message);
+          }
         }
-
         // forループを終了
         break;
       }

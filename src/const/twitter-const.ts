@@ -70,6 +70,18 @@ export class TwitterConst {
   static readonly API_PATH_UPDATE: string = "statuses/update";
 
   /**
+   * APIパス リツイート
+   * @constant {string}
+   */
+  static readonly API_PATH_RETWEET: string = "statuses/retweet/";
+
+  /**
+   * APIパス お気に入り
+   * @constant {string}
+   */
+  static readonly API_PATH_FAVORITE: string = "favorites/create";
+
+  /**
    * タイムライン取得数
    * @constant {number}
    */
@@ -88,8 +100,14 @@ export class TwitterConst {
   static readonly AUTHORIZATION_MESSAGE_NO: string = "認証に失敗しました。";
 
   /**
-   * リツイート＆お気に入りメッセージ
+   * メッセージ ツイート
    * @constant {string}
    */
-  static readonly RT_FAV_MESSAGE: string = "[RT&Fav] https://twitter.com/{0}/status/{1}";
+  static readonly MESSAGE_UPDATE: string = "[UPDATE] https://twitter.com/{0}/status/{1}";
+
+  /**
+   * メッセージ リツイート＆お気に入り
+   * @constant {string}
+   */
+  static readonly MESSAGE_RETWEET_FAVORITE: string = "[RT&FAV] https://twitter.com/{0}/status/{1}";
 }

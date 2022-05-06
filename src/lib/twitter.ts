@@ -1,5 +1,5 @@
-import {TwitterConst} from "../const/twitter-const";
 import {RamenBuConst} from "../const/ramen-bu-const";
+import {TwitterConst} from "../const/twitter-const";
 
 /**
  * Twitter取得用クラス
@@ -40,7 +40,7 @@ export class Twitter {
       message = TwitterConst.AUTHORIZATION_MESSAGE_NO;
     }
 
-    // メッセージを表示
+    // メッセージHTMLを表示
     return HtmlService.createHtmlOutput(message);
   }
 
@@ -73,9 +73,8 @@ export class Twitter {
       count: TwitterConst.HOME_TIMELINE_COUNT
     };
 
-    // 最大IDが設定された場合
-    if (typeof maxId !== RamenBuConst.UNDEFINED_STRING) {
-      // 最大IDをパラメータに設定
+    if ("undefined" !== typeof maxId) {
+      // 最大IDが設定された場合，最大IDをパラメータに設定
       params.max_id = maxId;
     }
 
@@ -96,6 +95,31 @@ export class Twitter {
 
     // API基底を呼出し
     return this.api<Twitter.JSON.Status>(TwitterConst.API_PATH_UPDATE, params);
+  }
+
+  /**
+   * リツイート
+   * @param {string} id ツイートID
+   * @return {Twitter.JSON.Status | null} リツイート結果
+   */
+  public retweet(id: string): Twitter.JSON.Status | null {
+    // API基底を呼出し
+    return this.api<Twitter.JSON.Status>(TwitterConst.API_PATH_RETWEET + id);
+  }
+
+  /**
+   * お気に入り
+   * @param {string} id ツイートID
+   * @return {Twitter.JSON.Status | null} お気に入り結果
+   */
+  public favorite(id: string): Twitter.JSON.Status | null {
+    // パラメータを設定
+    const params: Twitter.Parameters = {
+      id: id
+    };
+
+    // API基底を呼出し
+    return this.api<Twitter.JSON.Status>(TwitterConst.API_PATH_FAVORITE, params);
   }
 
   /**
@@ -136,40 +160,52 @@ export class Twitter {
   /**
    * API基底
    * @param {string} apiPath APIパス
-   * @param {Twitter.Parameters} params パラメータ
+   * @param {Twitter.Parameters} [params] パラメータ
    * @return {T} 処理結果
    */
-  private api<T>(apiPath: string, params: Twitter.Parameters): T | null {
-    // サービスを取得
-    const service = this.getService();
+  private api<T>(apiPath: string, params?: Twitter.Parameters): T | null {
     // 処理結果
     let result = null;
 
-    // サービスにアクセスできた場合
-    if (service.hasAccess()) {
-      // API URLを設定
-      let apiUrl: string = TwitterConst.API_URL + apiPath + ".json";
-      // URL Fetchオプションを初期化
-      const opts: GoogleAppsScript.URL_Fetch.URLFetchRequestOptions = {};
+    try {
+      // サービスを取得
+      const service = this.getService();
 
-      if (TwitterConst.API_PATH_UPDATE === apiPath) {
-        // post時のオプションを設定
-        opts.method = "post";
-        opts.payload = params;
-      } else {
-        // get時のオプション，URLを設定
-        opts.method = "get";
-        apiUrl += "?" + this.parse(params);
-      }
+      if (service.hasAccess()) {
+        // サービスにアクセスできた場合
+        // API URLを設定
+        let apiUrl: string = TwitterConst.API_URL + apiPath + ".json";
+        // URL Fetchオプションを初期化
+        const opts: GoogleAppsScript.URL_Fetch.URLFetchRequestOptions = {};
 
-      try {
+        if (TwitterConst.API_PATH_HOME_TIMELINE === apiPath) {
+          // GETの場合
+          opts.method = "get";
+
+          if ("undefined" !== typeof params) {
+            // パラメータが設定された場合，GET時のURLにパラメータを設定
+            apiUrl += "?" + this.parse(params);
+          }
+        } else {
+          // POSTの場合
+          opts.method = "post";
+
+          if ("undefined" !== typeof params) {
+            // パラメータが設定された場合，POST時のパラメータを設定
+            opts.payload = params;
+          }
+        }
+
         // 処理結果を取得
         const response = service.fetch(apiUrl, opts);
         // 処理結果をJSONに変換
         result = <T> JSON.parse(response.getContentText());
-      } catch (error: any) {
-        Logger.log(error);
       }
+    } catch (error: any) {
+      // エラーログを出力
+      Logger.log(error);
+      // 処理を終了
+      return result;
     }
 
     // 処理結果を返却

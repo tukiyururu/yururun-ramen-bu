@@ -1,6 +1,6 @@
 declare namespace Twitter {
   interface Parameters {
-    [key: string]: any;
+    [key: string]: number | string;
   }
 
   namespace JSON {

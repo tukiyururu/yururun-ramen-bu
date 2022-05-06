@@ -1,5 +1,3 @@
-import {RamenBuConst} from "../const/ramen-bu-const";
-
 /**
  * ユーティリティ用クラス
  * @class {Util}
@@ -19,7 +17,7 @@ export class Util {
    */
   public static format(string: string, ...embedAry: string[]): string {
     return string.replace(/{(\d+)}/g, (match: string, number: number) => {
-      return typeof embedAry[number] != RamenBuConst.UNDEFINED_STRING ? embedAry[number] : match;
+      return "undefined" !== typeof embedAry[number] ? embedAry[number] : match;
     });
   }
 
