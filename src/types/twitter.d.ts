@@ -3,6 +3,11 @@ declare namespace Twitter {
     [key: string]: number | string;
   }
 
+  interface Retweets {
+    id_str: string,
+    screen_name: string;
+  }
+
   namespace JSON {
     interface Status {
       id_str: string;

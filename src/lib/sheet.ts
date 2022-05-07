@@ -41,9 +41,7 @@ export class Sheet {
       }
     } catch (error: any) {
       // エラーログを出力
-      Logger.log(error);
-      // 処理を終了
-      return result;
+      console.error(error);
     }
 
     // 処理結果を返却
@@ -71,7 +69,7 @@ export class Sheet {
   /**
    * 最終ID設定
    * @param {string} value 値
-   * @return {string} 最終ID
+   * @return {string | null} 最終ID
    */
   public static setLastId(value: string): string | null {
     // スプレッドシートに最終IDを設定
@@ -81,7 +79,7 @@ export class Sheet {
   /**
    * 回数設定
    * @param {number} number 値
-   * @return {number} 回数
+   * @return {number | null} 回数
    */
   public static setCount(number: number): number | null {
     // スプレッドシートに回数を設定

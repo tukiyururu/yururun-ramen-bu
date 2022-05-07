@@ -31,4 +31,64 @@ export class Util {
       return String.fromCharCode(match.charCodeAt(0) + 0xFEE0);
     });
   }
+
+  /**
+   * 定時トリガーを設定
+   * @param {number} hour 時
+   * @param {number} minute 分
+   * @param {string} functionName 関数名
+   */
+  public static setAtTrigger(hour: number, minute: number, functionName: string) {
+    // 現在日時を取得
+    const date = new Date();
+    // 時分の設定
+    date.setHours(hour);
+    date.setMinutes(minute);
+
+    try {
+      // 定時トリガーを設定
+      ScriptApp.newTrigger(functionName)
+          .timeBased().at(date).create();
+    } catch (eroor: any) {
+      // エラーログを出力
+      console.error(eroor);
+    }
+  }
+
+  /**
+   * 毎分トリガー設定
+   * @param {number} minute 分
+   * @param {string} functionName 関数名
+   */
+  public static setEveryMinutesTrigger(minute: number, functionName: string) {
+    try {
+      // 毎分トリガーを設定
+      ScriptApp.newTrigger(functionName)
+          .timeBased().everyMinutes(minute).create();
+    } catch (eroor: any) {
+      // エラーログを出力
+      console.error(eroor);
+    }
+  }
+
+  /**
+   * トリガー削除
+   * @param {string} functionName 関数名
+   */
+  public static deleteTrigger(functionName: string) {
+    try {
+      // トリガーを取得
+      const triggers = ScriptApp.getProjectTriggers();
+
+      for (const trigger of triggers) {
+        if (trigger.getHandlerFunction() === functionName) {
+          // 関数名が一致した場合，トリガーを削除
+          ScriptApp.deleteTrigger(trigger);
+        }
+      }
+    } catch (eroor: any) {
+      // エラーログを出力
+      console.error(eroor);
+    }
+  }
 }

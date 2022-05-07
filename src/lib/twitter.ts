@@ -203,9 +203,7 @@ export class Twitter {
       }
     } catch (error: any) {
       // エラーログを出力
-      Logger.log(error);
-      // 処理を終了
-      return result;
+      console.error(error);
     }
 
     // 処理結果を返却

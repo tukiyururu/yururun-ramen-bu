@@ -10,16 +10,46 @@ export class RamenBuConst {
   static readonly EMPTY_STRING: string = "";
 
   /**
+   * 開発判定用文字列
+   * @constant {string}
+   */
+  static readonly DEVELOPMENT_STRING: string = "development";
+
+  /**
    * スリープミリ秒数
    * @constant {number}
    */
   static readonly SLEEP: number = 3000;
 
   /**
-   * 開発の場合
-   * @constant {string}
+   * 定時トリガー設定 時
+   * @constant {number}
    */
-  static readonly DEVELOPMENT_STRING: string = "development";
+  static readonly SET_AT_HOUR: number = 22;
+
+  /**
+   * 定時トリガー設定 分
+   * @constant {number}
+   */
+  static readonly SET_AT_MINUTE: number = 50;
+
+  /**
+   * ハッシュタグのリツイート 分
+   * @constant {number}
+   */
+  static readonly HASH_TAG_RETWEET_MINUTE: number = 15;
+
+  /**
+   * 日次ツイート 時
+   * @constant {number}
+   */
+  static readonly DAILY_UPDATE_HOUR: number = 23;
+
+  /**
+   * 日次ツイート 分
+   * @constant {number}
+   */
+  static readonly DAILY_UPDATE_MINUTE: number = 59;
 
   /**
    * 日次メッセージ 回数
@@ -31,7 +61,7 @@ export class RamenBuConst {
    * 日次メッセージ 配列
    * @constant {RamenBu.DailyMessageArray[]}
    */
-  static readonly DAILY_MESSAGE_ARRAY: RamenBu.DailyMessageArray[] = [
+  static readonly DAILY_MESSAGE_ARRAY: RamenBuConst.DailyMessageArray[] = [
     {
       border: 0,
       message: "０回……。このままでは廃部の危機です。みなさんラーメン部員としての自覚を持ってください！"

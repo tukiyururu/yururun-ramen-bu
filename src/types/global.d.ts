@@ -4,7 +4,8 @@ declare global {
   function setProperty(): void
   function setCallback(request: object): GoogleAppsScript.HTML.HtmlOutput;
   function getAuthorizeUrl(): void;
-  function setSheet(): void;
+  function setRamenBu(): void;
+  function setAtTrigger(): void;
   function hashTagRetweet(): void;
   function dailyUpdate(): void;
 }
