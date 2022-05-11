@@ -33,7 +33,39 @@ export class Util {
   }
 
   /**
-   * 定時トリガーを設定
+   * 毎分トリガー設定
+   * @param {number} minute 分
+   * @param {string} functionName 関数名
+   */
+  public static setEveryMinutesTrigger(minute: number, functionName: string) {
+    try {
+      // 毎分トリガーを設定
+      ScriptApp.newTrigger(functionName)
+          .timeBased().everyMinutes(minute).create();
+    } catch (eroor: any) {
+      // エラーログを出力
+      console.error(eroor);
+    }
+  }
+
+  /**
+   * 日次トリガー設定
+   * @param {number} hour 時
+   * @param {string} functionName 関数名
+   */
+  public static setAtHourTrigger(hour: number, functionName: string) {
+    try {
+      // 日次トリガーを設定
+      ScriptApp.newTrigger(functionName)
+          .timeBased().everyDays(1).atHour(hour).create();
+    } catch (eroor: any) {
+      // エラーログを出力
+      console.error(eroor);
+    }
+  }
+
+  /**
+   * 時分トリガー設定
    * @param {number} hour 時
    * @param {number} minute 分
    * @param {string} functionName 関数名
@@ -46,25 +78,9 @@ export class Util {
     date.setMinutes(minute);
 
     try {
-      // 定時トリガーを設定
+      // 時分トリガー設定
       ScriptApp.newTrigger(functionName)
           .timeBased().at(date).create();
-    } catch (eroor: any) {
-      // エラーログを出力
-      console.error(eroor);
-    }
-  }
-
-  /**
-   * 毎分トリガー設定
-   * @param {number} minute 分
-   * @param {string} functionName 関数名
-   */
-  public static setEveryMinutesTrigger(minute: number, functionName: string) {
-    try {
-      // 毎分トリガーを設定
-      ScriptApp.newTrigger(functionName)
-          .timeBased().everyMinutes(minute).create();
     } catch (eroor: any) {
       // エラーログを出力
       console.error(eroor);

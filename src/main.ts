@@ -12,16 +12,16 @@ import {Util} from "./lib/util";
 const twitter = new Twitter(global.setCallback.name);
 
 /**
- * 定時トリガー設定 関数名
- * @constant {string}
- */
-const setAtTriggerName: string = global.setAtTrigger.name;
-
-/**
  * ハッシュタグのリツイート 関数名
  * @constant {string}
  */
 const hashTagRetweetName: string = global.hashTagRetweet.name;
+
+/**
+ * 時分トリガー設定 関数名
+ * @constant {string}
+ */
+const setAtTriggerName: string = global.setAtTrigger.name;
 
 /**
  * 日次ツイート 関数名
@@ -60,22 +60,19 @@ global.setRamenBu = () => {
     Sheet.setCount(0);
 
     // トリガーを削除
-    Util.deleteTrigger(setAtTriggerName);
     Util.deleteTrigger(hashTagRetweetName);
+    Util.deleteTrigger(setAtTriggerName);
     Util.deleteTrigger(dailyUpdateName);
 
-    // 定時トリガー設定のトリガーを設定
-    Util.setAtTrigger(RamenBuConst.SET_AT_HOUR,
-        RamenBuConst.SET_AT_MINUTE, setAtTriggerName);
-
     // ハッシュタグのリツイートのトリガーを設定
-    Util.setEveryMinutesTrigger(RamenBuConst.HASH_TAG_RETWEET_MINUTE,
-        hashTagRetweetName);
+    Util.setEveryMinutesTrigger(RamenBuConst.HASH_TAG_RETWEET_MINUTE, hashTagRetweetName);
+    // 時分トリガー設定のトリガーを設定
+    Util.setAtHourTrigger(RamenBuConst.SET_AT_HOUR, setAtTriggerName);
   }
 };
 
 /**
- * 定時トリガー設定
+ * 時分トリガー設定
  */
 global.setAtTrigger = () => {
   // 日次ツイートのトリガーを設定
@@ -100,7 +97,7 @@ global.hashTagRetweet = () => {
     // ユーザIDを取得
     const userId: string = `${userProperties.getProperty(TwitterConst.USER_ID)}`;
     // 判定ハッシュタグを取得
-    const matchHashtag: string = `${userProperties.getProperty(TwitterConst.HASH_TAG)}`;
+    const matchHashTag: string = `${userProperties.getProperty(TwitterConst.HASH_TAG)}`;
 
     // ループ終了フラグを初期化
     let loopEndFlg = false;
@@ -130,7 +127,7 @@ global.hashTagRetweet = () => {
           if (!status.retweeted_status && userId !== status.user.id_str) {
             // リツイートでない，かつ，自分のツイートでない場合
             for (const hashtag of status.entities.hashtags) {
-              if (matchHashtag === hashtag.text) {
+              if (matchHashTag === hashtag.text) {
                 // ハッシュタグが一致した場合，リツイートオブジェクトを追加
                 retweets.push({
                   id_str: status.id_str,
@@ -177,12 +174,11 @@ global.hashTagRetweet = () => {
           twitter.favorite(retweet.id_str);
 
           if (RamenBuConst.DEVELOPMENT_STRING === `${process.env.NODE_ENV}`) {
-            // 開発の場合
-            // メッセージを設定
+            // 開発の場合，メッセージを設定
             const message = Util.format(TwitterConst.MESSAGE_RETWEET_FAVORITE,
                 retweet.screen_name, retweet.id_str);
             // ログ出力
-            console.log(message);
+            Logger.log(message);
           }
 
           // スリープ
@@ -222,14 +218,16 @@ global.dailyUpdate = () => {
         // ツイート結果を取得
         const result = twitter.update(status);
 
-        if (RamenBuConst.DEVELOPMENT_STRING === `${process.env.NODE_ENV}`) {
-          // 開発の場合
-          if (result !== null) {
-            // メッセージを設定
+        if (result !== null) {
+          // ツイート結果が取得できた場合，スプレッドシートの回数を初期化
+          Sheet.setCount(0);
+
+          if (RamenBuConst.DEVELOPMENT_STRING === `${process.env.NODE_ENV}`) {
+            // 開発の場合，メッセージを設定
             const message = Util.format(TwitterConst.MESSAGE_UPDATE,
                 result.user.screen_name, result.id_str);
             // ログ出力
-            console.log(message);
+            Logger.log(message);
           }
         }
         // forループを終了

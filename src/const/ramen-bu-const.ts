@@ -22,22 +22,16 @@ export class RamenBuConst {
   static readonly SLEEP: number = 3000;
 
   /**
-   * 定時トリガー設定 時
-   * @constant {number}
-   */
-  static readonly SET_AT_HOUR: number = 22;
-
-  /**
-   * 定時トリガー設定 分
-   * @constant {number}
-   */
-  static readonly SET_AT_MINUTE: number = 50;
-
-  /**
    * ハッシュタグのリツイート 分
    * @constant {number}
    */
   static readonly HASH_TAG_RETWEET_MINUTE: number = 15;
+
+  /**
+   * 時分トリガー設定 時
+   * @constant {number}
+   */
+  static readonly SET_AT_HOUR: number = 22;
 
   /**
    * 日次ツイート 時
@@ -59,7 +53,7 @@ export class RamenBuConst {
 
   /**
    * 日次メッセージ 配列
-   * @constant {RamenBu.DailyMessageArray[]}
+   * @constant {RamenBuConst.DailyMessageArray[]}
    */
   static readonly DAILY_MESSAGE_ARRAY: RamenBuConst.DailyMessageArray[] = [
     {
